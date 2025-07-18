@@ -1,10 +1,13 @@
 import openai
-import os
 import re
 import streamlit as st
-# API 키 설정
-openai.api_key = st.secrets["openai"]["api_key"]
+
+# ✅ Streamlit secrets에서 API 키 가져오기
+OPENAI_API_KEY = st.secrets["openai"]["api_key"]
+
+# ✅ OpenAI 클라이언트 초기화
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
+
 
 # 팔레트 정의
 PALETTES = {
