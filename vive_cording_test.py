@@ -130,7 +130,6 @@ def generate_commented_code(code: str, style: str = "basic") -> str:
     )
     return response.choices[0].message.content
 
-# 실행부
 if __name__ == "__main__":
     print("💡 CodePalette: 코드 주석 + 색상 하이라이팅\n" + "-" * 40)
     code = """
@@ -140,15 +139,38 @@ def greet(name):
 
 greet("CodePalette")
 """
-    comment_style = input("주석 스타일 선택 (basic / emoji / block): ").strip() or "basic"
+    comment_style = input("주석 스타일 선택 (basic / emoji / block / educational): ").strip() or "educational"
     theme = input("테마 선택 (dark / light / sorairo / midnight): ").strip() or "sorairo"
+    palette = PALETTES.get(theme, PALETTES["sorairo"])
 
+    # ✅ 하이라이팅 소개 및 범례 먼저 출력
+    print("\n🎨 [하이라이팅이란?]")
+    print("코드의 각 요소(키워드, 함수, 문자열 등)를 색상으로 구분해 가독성과 학습 효과를 높이는 방법입니다.")
+
+    legend_html = f'''
+    <div style="margin-top:16px;padding:8px 12px;border-radius:6px;background:#fffbe7;border:1px solid #facc15;font-size:15px;">
+        <b>색상 범례:</b><br>
+        <span style="color:{palette['keyword']};font-weight:bold;">🟦 키워드</span> (조건문, 반복문, def 등),
+        <span style="color:{palette['function']};font-weight:bold;">🟪 함수명</span>,
+        <span style="color:{palette['variable']};font-weight:bold;">🟣 변수</span>,
+        <span style="color:{palette['string']};font-weight:bold;">🟩 문자열</span>,
+        <span style="color:{palette['number']};font-weight:bold;">🟨 숫자</span>,
+        <span style="color:{palette['operator']};font-weight:bold;">🟥 연산자</span>,
+        <span style="color:{palette['builtin']};font-weight:bold;">🟦 내장함수</span>,
+        <span style="color:{palette['comment']};font-weight:bold;">💬 주석</span>
+    </div>
+    '''
+    print("\n🗺️ 색상 범례 (HTML):\n")
+    print(legend_html)
+
+    # ✅ GPT 주석 생성
     print("\n🚧 GPT 주석 생성 중...")
     commented = generate_commented_code(code, style=comment_style)
     print("\n✅ [자동 생성된 주석 코드]\n")
     print(commented)
 
-    print("\n🎨 [HTML 하이라이팅 결과]\n")
-    palette = PALETTES.get(theme, PALETTES["sorairo"])
+    # ✅ 하이라이팅 결과
     html = highlight_code(commented, palette)
+    print("\n✨ [HTML 하이라이팅 결과]\n")
     print(html)
+
