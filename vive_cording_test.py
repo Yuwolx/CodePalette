@@ -1,9 +1,9 @@
 import openai
 import os
 import re
-
+import streamlit as st
 # API 키 설정
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "your_openai_api_key_here")
+openai.api_key = st.secrets["openai"]["api_key"]
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 # 팔레트 정의
